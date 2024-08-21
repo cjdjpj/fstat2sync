@@ -43,6 +43,8 @@ impl Fstat{
         let num_alleles: u32 = metadata[2].parse().unwrap();
         let allele_digits: u32 = metadata[3].parse().unwrap();
 
+        assert!(num_alleles == 4, "Number of alleles must be 4 (ATCG)");
+
         // skip locus names
         for _ in 0..num_loci{
             let _ = fstat_reader.read_line(&mut String::new())?;
@@ -93,9 +95,20 @@ impl Fstat{
         }
         writeln!(sync_file, "#{header}")?;
         for (locus_index, locus) in self.allele_counts.iter().enumerate(){
-            let mut locus_string = format!("NA\t{locus_index}\tT");
+            let mut locus_string = String::new();
             for pool in locus{
-                locus_string = format!("{locus_string}\t{}:{}:{}:{}:0:0", pool.0, pool.1, pool.2, pool.3)
+                let (a, t, c, g) = pool;
+                locus_string = format!("{a}:{t}:{c}:{g}:0:0");
+                let ref_base = if a >= t && a >= c && a >= g {
+                    "A"
+                } else if t >= c && t >= g {
+                    "T"
+                } else if c >= g {
+                    "C"
+                } else {
+                    "G"
+                };
+                locus_string = format!("NA\t{locus_index}\t{ref_base}\t{locus_string}");
             }
             writeln!(sync_file, "{}", locus_string)?;
         }

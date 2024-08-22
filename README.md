@@ -7,7 +7,7 @@ The synchronized pileup format is used to represent pool-seq data.
 This conversion is useful if we want to treat FSTAT as pseudo-poolseq data, for example when outputted by the forward simulation program quantiNemo2.
 
 Subsequently:
-1. Only supports 4 alleles (simulating sequence reads A/T/C/G)
+1. Only supports 4 alleles (simulating sequence reads A/T/G/C)
 2. No reference allele (marked NA)
 3. No chromosomal/genetic structure, loci are consecutively (marked NA)
 

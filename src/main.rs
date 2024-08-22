@@ -98,15 +98,15 @@ impl Fstat{
             let mut locus_string = String::new();
             for pool in locus{
                 let (a, t, c, g) = pool;
-                locus_string = format!("{a}:{t}:{c}:{g}:0:0");
+                locus_string = format!("{a}:{t}:{g}:{c}:0:0");
                 let ref_base = if a >= t && a >= c && a >= g {
                     "A"
                 } else if t >= c && t >= g {
                     "T"
                 } else if c >= g {
-                    "C"
-                } else {
                     "G"
+                } else {
+                    "C"
                 };
                 locus_string = format!("NA\t{locus_index}\t{ref_base}\t{locus_string}");
             }

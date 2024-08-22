@@ -95,20 +95,21 @@ impl Fstat{
         }
         writeln!(sync_file, "#{header}")?;
         for (locus_index, locus) in self.allele_counts.iter().enumerate(){
-            let mut locus_string = String::new();
+            let mut locus_string = format!("NA\t{locus_index}\tNA");
+            let mut pool_seq = String::new();
             for pool in locus{
                 let (a, t, g, c) = pool;
-                locus_string = format!("{a}:{t}:{g}:{c}:0:0");
+                pool_seq = format!("{a}:{t}:{g}:{c}:0:0");
                 let ref_base = if a >= t && a >= g && a >= c {
                     "A"
-                } else if t >= c && t >= g {
+                } else if t >= g && t >= c {
                     "T"
-                } else if c >= g {
+                } else if g >= c {
                     "G"
                 } else {
                     "C"
                 };
-                locus_string = format!("NA\t{locus_index}\t{ref_base}\t{locus_string}");
+                locus_string = format!("{locus_string}\t{pool_seq}");
             }
             writeln!(sync_file, "{}", locus_string)?;
         }
